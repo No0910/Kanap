@@ -14,25 +14,27 @@ fetch("http://localhost:3000/api/products/")
 
                         let baliseA = document.createElement("a");
                         baliseA.href = `product.html?id=${product._id}`;
-                        items.appendChild(baliseA);
+                        
+                        let baliseArticle = document.createElement("article"); 
 
-                        let baliseImg = document.createElement("img");
-                        baliseImg.src =  `${product.imageUrl}`;
-                        baliseImg.alt = `${product.altTxt}`;
-                        baliseArticle.appendChild(baliseImg);
-                       
-
-                        let baliseArticle = document.createElement("article");
-                        baliseA.appendChild(baliseArticle);
-
+                        let baliseImage = document.createElement("img");
+                        baliseImage.src = `${product.imageUrl}`;
+                        baliseImage.alt = `${product.altTxt}`;
+                        
                         let baliseH3 = document.createElement("h3");
                         baliseH3.innerText = `${product.name}`;
-                        baliseArticle.appendChild(baliseH3);
-
-
+                       
                         let baliseP = document.createElement("p");
                         baliseP.innerText = `${product.description}`;
+                     
+                        
+                        items.appendChild(baliseA);
+                        baliseA.appendChild(baliseArticle);
+                        baliseArticle.appendChild(baliseImage);
+                        baliseArticle.appendChild(baliseH3);
                         baliseArticle.appendChild(baliseP);
+
+                       
 
 
                         // Puis injecter les informations du produit dans le HTML
