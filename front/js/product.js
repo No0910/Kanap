@@ -1,5 +1,13 @@
 //// Afficher le produit ////
 
+let productChoices = null;
+
+// 1. Création du panier dans le LS 
+
+let basket = localStorage.getItem("products");
+if (basket == null) {
+    basket = [];
+}
 
 
 //// 1 : Récupérer de l'id dynamique de l'url : 
@@ -46,11 +54,12 @@ fetch("http://localhost:3000/api/products/" + productId)
         }
 
     }).catch((error) => {
-    alert("Pas de réponse du serveur")
-})
+        alert("Pas de réponse du serveur")
+    })
 
 
 // 4 : Ajout du produit et ses infos au localstorage : "Ajouter un produit au panier"
+
 
 
 // Lorsqu'on clique sur le bouton 'btnAddProductToBasket' --> On envoie les produits au localStorage
@@ -58,60 +67,67 @@ fetch("http://localhost:3000/api/products/" + productId)
 let btnAddProductToBasket = document.querySelector("#addToCart");
 
 
- btnAddProductToBasket.addEventListener('click', () => {
+btnAddProductToBasket.addEventListener('click', () => {
 
     // 1. Récupération de la couleur sélectionnée
     let colorOfProduct = document.querySelector("#colors").value;
 
-    // 2. Création du panier dans le LS 
- 
-    let basket = JSON.parse(localStorage.getItem("products")) || [];
+    // 2. Récupération de la quantité saisie
 
-    // 3. récupération de la couleur saisie
+    let quantityOfProduct = document.querySelector("#quantity").value;
 
-    let quantityOfProduct = document.querySelector("#quantity").value; 
+    // 3. Conditions du panier
 
-   // 4. Conditions du panier
-
-    if (colorOfProduct.value === "") {
+    if (!colorOfProduct) {
         alert("Veuillez choisir une couleur")
-    } else if (quantityOfProduct.value > 0 && quantityOfProduct.value < 100) {
-
-       // Création de l'objet à envoyer au LocalStorage
-       const productChoices = {
-        id: productId,
-        color: colorOfProduct.value,
-        quantity: quantityOfProduct.value,
-    }
-        
-    } else if (quantityOfProduct.value > 100) {
+    } else if (quantityOfProduct <= 0) {
+        alert("Vous devez ajouter au moins un produit par commande")
+    } else if (quantityOfProduct > 100) {
         alert("Vous ne pouvez pas ajouter plus de 100 produits par commande")
 
-    } 
+    } else {
 
-   // 5. Méthode pour rechercher un produit si déja existant dans le LS
+        // Création de l'objet à envoyer au LocalStorage
+        productChoices = {
+            id: productId,
+            color: colorOfProduct,
+            quantity: quantityOfProduct,
+        }
 
-  let found = basket.find(
-    (element) => element.id == productId && element.color == colorOfProduct
-  );
 
-  if (found != undefined) {
-    
-    // 6. Valeur LS + value actuelle : transforme les chaines de caractères en nombre
-    let totalQuantity = parseInt(found.quantityOfProduct) + parseInt(quantityOfProduct);
-    found.quantityOfProduct = totalQuantity;
-    
-  } else {
+        console.log(productChoices);
+        console.log(basket);
 
-    // 7. Enregistrer les éléments dans le LS s'il n'existe pas
-    basket.push(productChoices); 
-  }
 
-  // 8. Enregistrer le nouvel élement et on additionne dans le LS/STRINGIFY = On récupère sous forme de chaine de caractère (string)
-  
-  localStorage.setItem("products", JSON.stringify(basket));
-  
+        // Si j'ai déjà des produits dans mon panier : je lance la recherche pour pouvoir le faire le cumul des quantités
+
+        if (basket) {
+            let found = basket.find(
+                (element) => element.id == productId && element.color == colorOfProduct
+            );
+
+            if (found != undefined) {
+
+                // 6. Valeur LS + value actuelle : transforme les chaines de caractères en nombre
+                let totalQuantity = parseInt(found.quantityOfProduct) + parseInt(quantityOfProduct);
+                found.quantityOfProduct = totalQuantity;
+
+            } else {
+                // 7. Enregistrer les éléments dans le LS s'il n'existe pas
+                basket.push(productChoices);
+            }
+
+        } else {
+            basket.push(productChoices);
+        }
+
+
+        // 8. Enregistrer le nouvel élement et on additionne dans le LS/STRINGIFY = On récupère sous forme de chaine de caractère (string)
+
+        localStorage.setItem("products", JSON.stringify(basket));
+
+    }
 });
-    
+
 
 
