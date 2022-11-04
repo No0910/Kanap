@@ -137,7 +137,7 @@ baliseDivContentSettings.appendChild(baliseDivContentSettingsDelete) ;
 // Je dois insérer un P dans ma balise delete
 let balisePDelete = document.createElement ("p") ;
 balisePDelete.className = "deleteItem" ;
-balisePDelete.textContent = « Supprimer » ;
+balisePDelete.textContent = "Supprimer";
 
 // J’insère mon p dans sa balise parent
 baliseDivContentSettingsDelete.appendChild(balisePDelete) ;
@@ -147,18 +147,9 @@ baliseArticle.appendChild(baliseDivContent);
 
 }
 
-
-
-
-
-
-
-
-
-
   }
 
-}
+
 
 
 
