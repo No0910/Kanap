@@ -137,7 +137,7 @@ fetch("http://localhost:3000/api/products/" + productId)
 
             // 13. Je récupère l'URL pour qu'au clic l'utilisateur soit basculé sur la page cart.html
 
-            document.location.href = "cart.html";
+            //document.location.href = "cart.html";
 
         }
 
