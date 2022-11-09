@@ -154,7 +154,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
     }}
 
-    // Fonction qui calcule le total des quantités de produits du panier
+    // Fonction qui calcule le total des quantités de produits du panier 
 
       function calculateTotalQuantity() {
       let getTotalQuantity = document.querySelector("#totalQuantity");
@@ -175,30 +175,33 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
     calculateTotalQuantity();
 
       
-   // Fonction qui calcule le prix total du panier
+  // Fonction qui calcule le prix total du panier
 
-    function calculateTotalPrice () {
+      let sumTotalPrice = [];
 
-    let basket = JSON.parse(localStorage.getItem("products"));
-    let totalPrice = document.querySelector("#totalPrice");
-    let total = basket.reduce((total, product) => total + product.price * product.quantity , 0)
-     
-     for (let i = 0; i < basket.length; i++) {
+      // Je vais chercher les prix dans le panier
+      for (let i = 0 ; i < basket.lenght; i++){
+        let priceProductInBasket = basket[i].price;
 
-    let totalPrice = 0;
+      // Je vais mettre les prix du panier dans la variable "sumTotalPrice"
+      sumTotalPrice.push(priceProductInBasket)
+      }
 
-     
-    };
+      //J'additionne ensuite les prix qu'il y a dans le tableau de la variable "sumTotalPrice" avec la méthode .reduce
+      const reducer = (accumulator,currentValue) => accumulator + currentValue ;
+      const totalPrice = sumTotalPrice.reduce(reducer,0);
+    
 
-      totalPrice.innerHTML = total;
-    }
+      //Je récupère ma div html
+      const  displayTotalPrice = `<span id="totalPrice">${totalPrice}</span>`;
+      const totalPriceHtml = document.querySelector("#totalPrice");
 
-   calculateTotalPrice(); 
-
+      console.log(totalPrice);
+      
 
   // Fonction lorsqu'on modifie une quantité, le panier se met à jour
 
-  function updatePriceAndQuantity (id,newValue) {
+  /* function updatePriceAndQuantity (id,newValue) {
   
     const productToUpdate = basket.find(product => product.id === id);
     productToUpdate.quantity = Number(newValue);
@@ -206,12 +209,36 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
     console.log("productToUpdate",productToUpdate);
     console.log("newValue",newValue);
 
-  } 
+  } */
 
 
   
  // Fonction de suppression d'un produit
-    
-function deleteProduct (){
-  let deleteButton = document.querySelectorAll(".cart__item .deleteItem");
-}
+
+      // Je sélectionne la référence de tous les boutons "supprimer"
+      let deleteButton = document.querySelectorAll(".deleteItem");
+      console.log("deleteButton");
+      
+      //Je sélectionne l'id qui va être supprimer en cliquant sur le bouton
+
+      for (let i = 0 ; i < deleteButton.length; i++){
+        deleteButton[i].addEventListener("click", (event) => {
+          event.preventDefault(); //preventDefault évite que la page se recharge au clic du bouton
+
+          //Sélection de l'id du produit qui va être supprimé au clic du bouton
+          let idSelectionDelete = basket[i]._id;
+          console.log(idSelectionDelete);
+
+          // avec la méthode filter 
+          basket = basket.filter ( element => element._id !== idSelectionDelete );
+
+          //J'envoie la variable dans le localStorage
+          localStorage.setItem("products", JSON.stringify(basket));
+
+          //Alerte + Rechargement de la page
+          alert("Ce produit a été supprimer du panier");
+          window.location.href = "cart.html";
+
+        })
+
+      }
