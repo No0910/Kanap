@@ -157,13 +157,14 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
     // Fonction qui calcule le total des quantités de produits du panier 
 
       function calculateTotalQuantity() {
+
       let getTotalQuantity = document.querySelector("#totalQuantity");
       let basket = JSON.parse(localStorage.getItem("products"));
       let calculateTotalQuantity= [];
       console.log(calculateTotalQuantity)
 
       let totalQuantity = 0;
-      for( let product of basket ){
+      for( let product of basket){
           totalQuantity += parseInt(product.quantity);
       }
 
@@ -196,28 +197,52 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
       const  displayTotalPrice = `<span id="totalPrice">${totalPrice}</span>`;
       const totalPriceHtml = document.querySelector("#totalPrice");
 
+     
       console.log(totalPrice);
       
 
   // Fonction lorsqu'on modifie une quantité, le panier se met à jour
 
-  /* function updatePriceAndQuantity (id,newValue) {
+   function updatePriceAndQuantity (id,newValue) {
+
+    let editQuantity = document.querySelectorAll(".itemQuantity");
+
+    for (let i = 0; i < editQuantity.length; i++){
+
+      editQuantity[i].addEventListener("change" , (event) => {
+        event.preventDefault(); // Evite que la page se recharge au 'change'
+
+      //Selection de l'element à modifier en fonction de son id ET sa couleur
+      let changeQuantity = basket[i].quantity; //
+      let changeValueOfQuantity = editQuantity[i].valueAsNumber; //
+
+      const findResult = basket.find(element => element.changeValueOfQuantity !== changeQuantity);
+
+      findResult.quantity = changeValueOfQuantity;
+      basket[i].quantity = findResult.quantity;
+
+      localStorage.setItem("products", JSON.stringify(basket));
+
+       // refresh rapide
+       location.reload();
+
+      });
+
+
+    }
+
+  } 
   
-    const productToUpdate = basket.find(product => product.id === id);
-    productToUpdate.quantity = Number(newValue);
-
-    console.log("productToUpdate",productToUpdate);
-    console.log("newValue",newValue);
-
-  } */
+  updatePriceAndQuantity();
 
 
   
  // Fonction de suppression d'un produit
 
+      function deleteProduct() { 
+
       // Je sélectionne la référence de tous les boutons "supprimer"
       let deleteButton = document.querySelectorAll(".deleteItem");
-      console.log("deleteButton");
       
       //Je sélectionne l'id qui va être supprimer en cliquant sur le bouton
 
@@ -225,20 +250,62 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
         deleteButton[i].addEventListener("click", (event) => {
           event.preventDefault(); //preventDefault évite que la page se recharge au clic du bouton
 
-          //Sélection de l'id du produit qui va être supprimé au clic du bouton
-          let idSelectionDelete = basket[i]._id;
-          console.log(idSelectionDelete);
+          //Sélection de l'id et de la couleur du produit qui va être supprimé au clic du bouton
+          let idSelectionDelete = basket[i].monProduit._id;
+          let idColorDelete = basket[i].product.color;
 
           // avec la méthode filter 
-          basket = basket.filter ( element => element._id !== idSelectionDelete );
+          basket = basket.filter ( element => element.monProduit._id !== idSelectionDelete || element.product.color !== idColorDelete);
 
           //J'envoie la variable dans le localStorage
           localStorage.setItem("products", JSON.stringify(basket));
 
           //Alerte + Rechargement de la page
-          alert("Ce produit a été supprimer du panier");
+          alert("Ce produit a bien été supprimé du panier");
           window.location.href = "cart.html";
 
         })
 
       }
+    }
+
+    deleteProduct();
+
+    ///////////////////////////////////////////
+         ///////// Formulaire /////////
+
+    // Je sélectionne la référence de mon form
+    let form = document.querySelector("#cart__order__form");
+  
+      //Ecouter la modification du prénom//
+      //Ecouter la modification du nom//
+      //Ecouter la modification de l'adresse//
+      //Ecouter la modification de la ville//
+
+       /******Validation Email******/
+      //Ecouter la modification de l'email//
+      /* form.email.addEventListener('change', function () {
+        validEmail(this);
+      });
+       
+        const validEmail = function (inputEmail){
+          let emailRegExp = new RegExp (
+            '^[a-zA-Z0-9.-_]+[@]+{1}[a-zA-Z0-9.-_]+[.]+{1}[a-z]{2,10}$','g'
+          );
+
+          //Récupération de la balise p de message d'erreur
+          let emailErrorMsg = document.getElementById('emailErrorMsg');
+
+          //Je teste l'expression régulière
+          let testEmail = emailRegExp.test(inputEmail.value);
+
+          if(testEmail){
+            emailErrorMsg.innerHTML = 'Adresse valide';
+            emailErrorMsg.classList.remove('text-danger');
+            emailErrorMsg.classList.add('text-success');
+          }else{
+            emailErrorMsg.innerHTML = 'Adresse invalide';
+            emailErrorMsg.classList.remove('text-success');
+            emailErrorMsg.classList.add('text-danger');
+          }
+        } */
