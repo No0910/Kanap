@@ -42,7 +42,6 @@ let baliseSection = document.getElementById ("cart__items") ;
 fetch("http://localhost:3000/api/products/" + product.id) //product.id récupère l'identifiant du produit dans le tableau crée ligne 27, .id est la clé
     .then((response) => {
         if (response.ok) {
-
             response.json()
                 .then((monProduit) => {
 
@@ -145,16 +144,14 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       //TODO fonction qui recalcule le panier quand je change les quantités
 
 
-                    }
-
-                )
+                    })
         }
       }
    )
 
     }}
 
-    // Fonction qui calcule le total des quantités de produits du panier 
+//// Fonction qui calcule le total des quantités de produits du panier ////
 
       function calculateTotalQuantity() {
 
@@ -176,30 +173,53 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
     calculateTotalQuantity();
 
       
-  // Fonction qui calcule le prix total du panier
+////Fonction qui calcule le prix total du panier///
 
-      let sumTotalPrice = [];
 
-      // Je vais chercher les prix dans le panier
-      for (let i = 0 ; i < basket.lenght; i++){
-        let priceProductInBasket = basket[i].price;
+  // Boucle qui va chercher les prix dans le panier
 
-      // Je vais mettre les prix du panier dans la variable "sumTotalPrice"
-      sumTotalPrice.push(priceProductInBasket)
-      }
+for (let i = 0 ; i < basket.lenght; i++) {
 
-      //J'additionne ensuite les prix qu'il y a dans le tableau de la variable "sumTotalPrice" avec la méthode .reduce
-      const reducer = (accumulator,currentValue) => accumulator + currentValue ;
-      const totalPrice = sumTotalPrice.reduce(reducer,0);
+  // Je crée un tableau pour le prix total des produits
+  let sumTotalPrice = [];
+ 
+  // Je récupère le produit courant
+  let product = basket[i];
+  
+  //J'appelle l'API //
+    fetch("http://localhost:3000/api/products/" + product.id)
+      .then((reponse) => {
+        if (response.ok) {
+          response.json()
+            .then((monProduit) => {
+
+              // Je récupère le produit courant
+              let product = basket[i];
+
+              // Nouvelle variable qui récupère le prix
+              let priceProductInBasket = basket[i].price;
+
+              // Je vais mettre les prix du panier dans la variable "sumTotalPrice"
+              sumTotalPrice.push(priceProductInBasket)
+             
+              //J'additionne ensuite les prix qu'il y a dans le tableau de la variable "sumTotalPrice" avec la méthode .reduce
+              //const reducer = (accumulator,currentValue) => accumulator + currentValue ;
+              //const totalPrice = sumTotalPrice.reduce(reducer,0); 
+              const totalPrice = calculateTotalQuantity * priceProductInBasket
+  
+              //Je récupère ma div html
+              const  displayTotalPrice = `<span id="totalPrice">${totalPrice}</span>`;
+              const totalPriceHtml = document.querySelector("#totalPrice");
+  
+              console.log(totalPrice);
+              console.log(sumTotalPrice);
+                 
+            })
+          }
+        })
+  }
+
     
-
-      //Je récupère ma div html
-      const  displayTotalPrice = `<span id="totalPrice">${totalPrice}</span>`;
-      const totalPriceHtml = document.querySelector("#totalPrice");
-
-     
-      console.log(totalPrice);
-      
 
   // Fonction lorsqu'on modifie une quantité, le panier se met à jour
 
@@ -251,11 +271,11 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
           event.preventDefault(); //preventDefault évite que la page se recharge au clic du bouton
 
           //Sélection de l'id et de la couleur du produit qui va être supprimé au clic du bouton
-          let idSelectionDelete = basket[i].monProduit._id;
-          let idColorDelete = basket[i].product.color;
+          let idSelectionDelete = basket[i].id;
+          let idColorDelete = basket[i].color;
 
           // avec la méthode filter 
-          basket = basket.filter ( element => element.monProduit._id !== idSelectionDelete || element.product.color !== idColorDelete);
+          basket = basket.filter ((canape) => canape.id !== idSelectionDelete || canape.color !== idColorDelete);
 
           //J'envoie la variable dans le localStorage
           localStorage.setItem("products", JSON.stringify(basket));
