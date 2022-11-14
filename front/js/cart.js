@@ -107,11 +107,8 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       baliseInputSettings.setAttribute("min","1");
                       baliseInputSettings.setAttribute("max","100");
                       baliseInputSettings.setAttribute("value", product.quantity);
-                      //baliseInputSettings.setAttribute("onchange", updatePriceAndQuantity(product.id,product.quantity)); 
-                      //console.log(baliseInputSettings, {monProduit});
-                      baliseInputSettings.addEventListener("input", () => updatePriceAndQuantity(product.id, baliseInputSettings.value));
-
-
+                      baliseInputSettings.addEventListener('change', (event) => updatePriceAndQuantity(product.id, product.color, baliseInputSettings.value));
+                     
                       // Je crée une nouvelle div pour la suppression
                       let baliseDivContentSettingsDelete = document.createElement("div") ;
                       baliseDivContentSettingsDelete.classList.add("cart__item__settings__delete") ;
@@ -253,11 +250,47 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
     // Fonction lorsqu'on modifie une quantité, le panier se met à jour
 
-      function updatePriceAndQuantity (id, newValue){
-        const itemToUpdate = basket.find((product) => product.id === id);
-        itemToUpdate.baliseDivContentSettingsQuantity = Number(newValue);
+      function updatePriceAndQuantity (id, color, qty){
+
+        // je contrôle la validité de l'id produit
+        if (!id)
+        return false;
+
+        // je recherche le produit dans mon panier ( basket = localStorage )
+        let itemToUpdate = basket.findIndex((product) => product.id === id && product.color === color );
+
+        // je contrôle les données
+        console.log(id, color, qty);
+
+        // je contrôle la position du produit dans le panier   
+        console.log(itemToUpdate);
+
+        // je mets à jour la quantité dans le panier
+        basket[itemToUpdate].quantity = qty;
+
+        // je sauvegarde mon panier
+        basket.push(qty);
+        basket.pop();
+
+        // je contrôle mes données
+        console.log(basket);
+
+        // je sauvegarde mon localStorage
+        localStorage.setItem("products", JSON.stringify(basket));
+
+        // je contrôle mon localStorage
+        console.log(localStorage);
+
+        // je recalcule les quantités
         calculateTotalQuantity()
+
+        // je recalcule le total à payer
         calculateTotalPrice()
+                  
+         /*const itemToUpdate = basket.find((product) => product.id === id);
+        itemToUpdate.quantity = Number(newValue);
+        calculateTotalQuantity()
+        calculateTotalPrice()*/
       } 
       
       updatePriceAndQuantity();
