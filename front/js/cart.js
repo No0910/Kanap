@@ -107,9 +107,9 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       baliseInputSettings.setAttribute("min","1");
                       baliseInputSettings.setAttribute("max","100");
                       baliseInputSettings.setAttribute("value", product.quantity);
-                      baliseInputSettings.setAttribute("onchange", updatePriceAndQuantity(product.id,product.quantity)); 
-
-                      // Soit on utilise le addEventListener (attention pas dans la boucle mais ICI !!) soit le setAttribute on change
+                      //baliseInputSettings.setAttribute("onchange", updatePriceAndQuantity(product.id,product.quantity)); 
+                      //console.log(baliseInputSettings, {monProduit});
+                      baliseInputSettings.addEventListener("input", () => updatePriceAndQuantity(product.id, baliseInputSettings.value));
 
 
                       // Je crée une nouvelle div pour la suppression
@@ -158,8 +158,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
       let getTotalQuantity = document.querySelector("#totalQuantity");
       let basket = JSON.parse(localStorage.getItem("products"));
       let calculateTotalQuantity= [];
-      console.log(calculateTotalQuantity)
-
+      
       let totalQuantity = 0;
       for( let product of basket){
           totalQuantity += parseInt(product.quantity);
@@ -182,11 +181,12 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
      // Je crée une variable pour le total prix
   let sumTotalPrice = 0;
- 
+  
   for (let i = 0 ; i < basket.length; i = i + 1) {
 
       // Je récupère le produit courant
       let product = basket[i];
+      console.log(product);
       
       //J'appelle l'API //
         fetch("http://localhost:3000/api/products/" + product.id)
@@ -201,8 +201,8 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                   // Nouvelle variable pour calculer le prix par produit
                   let pricePerProduct = product.quantity * priceProductInBasket;
 
-                  //
-                  sumTotalPrice = sumTotalPrice + pricePerProduct ;
+                  // Somme totale = Somme totale + prix par produit (quantité de produit x prix du produit unitaire)
+                  sumTotalPrice += pricePerProduct ;
 
                   //Je récupère ma div html
                   const totalPriceHtml = document.querySelector("#totalPrice");
@@ -216,44 +216,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
     
     calculateTotalPrice();
 
-        
 
-  // Fonction lorsqu'on modifie une quantité, le panier se met à jour
-
-   function updatePriceAndQuantity (id, newValue) {
-    console.log(id,newValue);
-
-    //let editQuantity = document.querySelectorAll(".itemQuantity");
-    //console.log(editQuantity);
-
-    /*for (let i = 0; i < editQuantity.length; i++){
-      
-      editQuantity[i].addEventListener("change" , (event) => {
-        event.preventDefault(); // Evite que la page se recharge au 'change'
-
-      //Selection de l'element à modifier en fonction de son id ET sa couleur
-      let changeQuantity = basket[i].quantity; 
-      let changeValueOfQuantity = editQuantity[i].valueAsNumber; 
-
-      const findResult = basket.find(canape => canape.changeValueOfQuantity !== changeQuantity);
-
-      findResult.quantity = changeValueOfQuantity;
-      basket[i].quantity = findResult.quantity;
-
-      localStorage.setItem("products", JSON.stringify(basket));
-
-      // Raffraichir la page rapidement
-       location.reload();
-
-      }); 
-    } */
-  } 
-  
-  updatePriceAndQuantity();
-
-
-
-  
  // Fonction de suppression d'un produit
 
       function removeItemFromCart(productId) { 
@@ -286,7 +249,21 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
       }
     }
 
-    removeItemFromCart();
+    //removeItemFromCart();
+
+    // Fonction lorsqu'on modifie une quantité, le panier se met à jour
+
+      function updatePriceAndQuantity (id, newValue){
+        const itemToUpdate = basket.find((product) => product.id === id);
+        itemToUpdate.baliseDivContentSettingsQuantity = Number(newValue);
+        calculateTotalQuantity()
+        calculateTotalPrice()
+      } 
+      
+      updatePriceAndQuantity();
+
+
+ 
 
     ///////////////////////////////////////////
          ///////// Formulaire /////////
