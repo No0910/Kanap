@@ -18,9 +18,9 @@ let nbProducts = basket.length;
 
 document.getElementById('totalQuantity').innerHTML = nbProducts;
 
-  // 2. J'affiche un tableau récapitulatif des produits / Je parcours mon localStorage
+// 2. J'affiche un tableau récapitulatif des produits / Je parcours mon localStorage
 
-  for (let i = 0; i < nbProducts; i++) {
+for (let i = 0; i < nbProducts; i++) {
  
 // Je récupère le produit courant
 
@@ -45,15 +45,11 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
             response.json()
                 .then((monProduit) => {
 
-                  console.log(monProduit);
-                     
-
                       // Je crée ma première balise la baliseArticle
                       let baliseArticle = document.createElement("article") ;
                       baliseArticle.className = "cart__item";
                       baliseArticle.setAttribute("data-id", monProduit._id );
                       baliseArticle.setAttribute("data-color", product.color);
-
 
                       // Je dois créer une div image à l’intérieur de laquelle se trouve une image
                       let baliseDivImage = document.createElement("div") ;
@@ -110,7 +106,11 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       baliseInputSettings.setAttribute("name","itemQuantity");
                       baliseInputSettings.setAttribute("min","1");
                       baliseInputSettings.setAttribute("max","100");
-                      baliseInputSettings.setAttribute("value", product.quantity); 
+                      baliseInputSettings.setAttribute("value", product.quantity);
+                      baliseInputSettings.setAttribute("onchange", updatePriceAndQuantity(product.id,product.quantity)); 
+
+                      // Soit on utilise le addEventListener (attention pas dans la boucle mais ICI !!) soit le setAttribute on change
+
 
                       // Je crée une nouvelle div pour la suppression
                       let baliseDivContentSettingsDelete = document.createElement("div") ;
@@ -153,7 +153,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
 //// Fonction qui calcule le total des quantités de produits du panier ////
 
-      function calculateTotalQuantity() {
+     function calculateTotalQuantity() {
 
       let getTotalQuantity = document.querySelector("#totalQuantity");
       let basket = JSON.parse(localStorage.getItem("products"));
@@ -178,88 +178,85 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
   // Boucle qui va chercher les prix dans le panier
 
-for (let i = 0 ; i < basket.lenght; i++) {
+  function calculateTotalPrice () {
 
-  // Je crée un tableau pour le prix total des produits
-  let sumTotalPrice = [];
+     // Je crée une variable pour le total prix
+  let sumTotalPrice = 0;
  
-  // Je récupère le produit courant
-  let product = basket[i];
-  
-  //J'appelle l'API //
-    fetch("http://localhost:3000/api/products/" + product.id)
-      .then((reponse) => {
-        if (response.ok) {
-          response.json()
-            .then((monProduit) => {
+  for (let i = 0 ; i < basket.length; i = i + 1) {
 
-              // Je récupère le produit courant
-              let product = basket[i];
+      // Je récupère le produit courant
+      let product = basket[i];
+      
+      //J'appelle l'API //
+        fetch("http://localhost:3000/api/products/" + product.id)
+          .then((response) => {
+            if (response.ok) {
+              response.json()
+                .then((monProduit) => {
 
-              // Nouvelle variable qui récupère le prix
-              let priceProductInBasket = basket[i].price;
+                  // Nouvelle variable qui récupère le prix
+                  let priceProductInBasket = monProduit.price;
 
-              // Je vais mettre les prix du panier dans la variable "sumTotalPrice"
-              sumTotalPrice.push(priceProductInBasket)
-             
-              //J'additionne ensuite les prix qu'il y a dans le tableau de la variable "sumTotalPrice" avec la méthode .reduce
-              //const reducer = (accumulator,currentValue) => accumulator + currentValue ;
-              //const totalPrice = sumTotalPrice.reduce(reducer,0); 
-              const totalPrice = calculateTotalQuantity * priceProductInBasket
-  
-              //Je récupère ma div html
-              const  displayTotalPrice = `<span id="totalPrice">${totalPrice}</span>`;
-              const totalPriceHtml = document.querySelector("#totalPrice");
-  
-              console.log(totalPrice);
-              console.log(sumTotalPrice);
-                 
+                  // Nouvelle variable pour calculer le prix par produit
+                  let pricePerProduct = product.quantity * priceProductInBasket;
+
+                  //
+                  sumTotalPrice = sumTotalPrice + pricePerProduct ;
+
+                  //Je récupère ma div html
+                  const totalPriceHtml = document.querySelector("#totalPrice");
+                  totalPriceHtml.innerHTML = sumTotalPrice ;         
+                })
+              }
             })
-          }
-        })
-  }
+      } 
 
+   }
     
+    calculateTotalPrice();
+
+        
 
   // Fonction lorsqu'on modifie une quantité, le panier se met à jour
 
-   function updatePriceAndQuantity (id,newValue) {
+   function updatePriceAndQuantity (id, newValue) {
+    console.log(id,newValue);
 
-    let editQuantity = document.querySelectorAll(".itemQuantity");
+    //let editQuantity = document.querySelectorAll(".itemQuantity");
+    //console.log(editQuantity);
 
-    for (let i = 0; i < editQuantity.length; i++){
-
+    /*for (let i = 0; i < editQuantity.length; i++){
+      
       editQuantity[i].addEventListener("change" , (event) => {
         event.preventDefault(); // Evite que la page se recharge au 'change'
 
       //Selection de l'element à modifier en fonction de son id ET sa couleur
-      let changeQuantity = basket[i].quantity; //
-      let changeValueOfQuantity = editQuantity[i].valueAsNumber; //
+      let changeQuantity = basket[i].quantity; 
+      let changeValueOfQuantity = editQuantity[i].valueAsNumber; 
 
-      const findResult = basket.find(element => element.changeValueOfQuantity !== changeQuantity);
+      const findResult = basket.find(canape => canape.changeValueOfQuantity !== changeQuantity);
 
       findResult.quantity = changeValueOfQuantity;
       basket[i].quantity = findResult.quantity;
 
       localStorage.setItem("products", JSON.stringify(basket));
 
-       // refresh rapide
+      // Raffraichir la page rapidement
        location.reload();
 
-      });
-
-
-    }
-
+      }); 
+    } */
   } 
   
   updatePriceAndQuantity();
 
 
+
   
  // Fonction de suppression d'un produit
 
-      function deleteProduct() { 
+      function removeItemFromCart(productId) { 
 
       // Je sélectionne la référence de tous les boutons "supprimer"
       let deleteButton = document.querySelectorAll(".deleteItem");
@@ -275,10 +272,10 @@ for (let i = 0 ; i < basket.lenght; i++) {
           let idColorDelete = basket[i].color;
 
           // avec la méthode filter 
-          basket = basket.filter ((canape) => canape.id !== idSelectionDelete || canape.color !== idColorDelete);
+          let newBasket = basket.filter((canape) => canape.id !== idSelectionDelete || canape.color !== idColorDelete);
 
           //J'envoie la variable dans le localStorage
-          localStorage.setItem("products", JSON.stringify(basket));
+          localStorage.setItem("basket", JSON.stringify(newBasket));
 
           //Alerte + Rechargement de la page
           alert("Ce produit a bien été supprimé du panier");
@@ -289,13 +286,13 @@ for (let i = 0 ; i < basket.lenght; i++) {
       }
     }
 
-    deleteProduct();
+    removeItemFromCart();
 
     ///////////////////////////////////////////
          ///////// Formulaire /////////
 
     // Je sélectionne la référence de mon form
-    let form = document.querySelector("#cart__order__form");
+    //let form = document.querySelector("#cart__order__form");
   
       //Ecouter la modification du prénom//
       //Ecouter la modification du nom//
