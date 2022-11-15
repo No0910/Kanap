@@ -112,6 +112,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       // Je crée une nouvelle div pour la suppression
                       let baliseDivContentSettingsDelete = document.createElement("div") ;
                       baliseDivContentSettingsDelete.classList.add("cart__item__settings__delete") ;
+                      baliseDivContentSettingsDelete.addEventListener("click",() => deleteItem(product.id, product.color));
 
                       // Je dois insérer un P dans ma balise delete
                       let balisePDelete = document.createElement ("p") ;
@@ -214,40 +215,6 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
     calculateTotalPrice();
 
 
- // Fonction de suppression d'un produit
-
-      function removeItemFromCart(productId) { 
-
-      // Je sélectionne la référence de tous les boutons "supprimer"
-      let deleteButton = document.querySelectorAll(".deleteItem");
-      
-      //Je sélectionne l'id qui va être supprimer en cliquant sur le bouton
-
-      for (let i = 0 ; i < deleteButton.length; i++){
-        deleteButton[i].addEventListener("click", (event) => {
-          event.preventDefault(); //preventDefault évite que la page se recharge au clic du bouton
-
-          //Sélection de l'id et de la couleur du produit qui va être supprimé au clic du bouton
-          let idSelectionDelete = basket[i].id;
-          let idColorDelete = basket[i].color;
-
-          // avec la méthode filter 
-          let newBasket = basket.filter((canape) => canape.id !== idSelectionDelete || canape.color !== idColorDelete);
-
-          //J'envoie la variable dans le localStorage
-          localStorage.setItem("basket", JSON.stringify(newBasket));
-
-          //Alerte + Rechargement de la page
-          alert("Ce produit a bien été supprimé du panier");
-          window.location.href = "cart.html";
-
-        })
-
-      }
-    }
-
-    //removeItemFromCart();
-
     // Fonction lorsqu'on modifie une quantité, le panier se met à jour
 
       function updatePriceAndQuantity (id, color, qty){
@@ -294,6 +261,60 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
       } 
       
       updatePriceAndQuantity();
+
+
+    // Fonction de suppression d'un produit  
+
+   function deleteItem (id,color) {
+      
+      //Je contrôle mes données
+      //console.log(id,color);
+
+      //
+      let itemToDelete = basket.findIndex((product) => product.id === id && product.color === color) 
+
+      //
+      console.log("item to delete: ", itemToDelete);
+
+      //
+      basket.splice(itemToDelete,1);
+
+      //
+      console.log(basket);
+
+      //
+      calculateTotalQuantity();
+
+      //
+      calculateTotalQuantity();
+
+      //
+      deleteDataFromLocalStorage();
+
+      //
+      deleteArticleFromPage(product);
+
+
+    }
+
+    function deleteDataFromLocalStorage(id,color) {
+
+      let key = `${product.id}-${product.color}`;
+      console.log("on retire cette key", key);
+      localStorage.removeItem(key)
+    }
+
+    function deleteArticleFromPage (product){
+      let articleToDelete = document.querySelector(
+        `<article class="cart__item" data-id="{product.id}" data-color="{product.color}">`
+      )
+
+      articleToDelete.remove();
+
+    }
+
+
+
 
 
  
