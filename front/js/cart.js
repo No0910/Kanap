@@ -335,38 +335,83 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
     ///////////////////////////////////////////
          ///////// Formulaire /////////
 
-    // Je sélectionne la référence de mon form
-    //let form = document.querySelector("#cart__order__form");
-  
-      //Ecouter la modification du prénom//
-      //Ecouter la modification du nom//
-      //Ecouter la modification de l'adresse//
-      //Ecouter la modification de la ville//
+// je récupère mon bouton "commander"
+  let orderButton = document.querySelector("#order");
 
-       /******Validation Email******/
-      //Ecouter la modification de l'email//
-      /* form.email.addEventListener('change', function () {
-        validEmail(this);
-      });
-       
-        const validEmail = function (inputEmail){
-          let emailRegExp = new RegExp (
-            '^[a-zA-Z0-9.-_]+[@]+{1}[a-zA-Z0-9.-_]+[.]+{1}[a-z]{2,10}$','g'
-          );
+// Au clic, cela soit appeler la fonction submitForm() (Soumettre le formulaire) :
+  orderButton.addEventListener('click', (event) => submitForm(event));
 
-          //Récupération de la balise p de message d'erreur
-          let emailErrorMsg = document.getElementById('emailErrorMsg');
+// Fonction pour soumettre le formulaire :
+ function submitForm(event) {
+  //Je ne veux pas que la page se recharge
+  event.preventDefault();
+  //
+  if(basket.length === 0) 
+    alert('Veuillez sélectionner un article à acheter')
+  //J'envoie une alerte une fois le clic effectué
+  alert('Formulaire envoyé !');
+  //Je contrôle les éléments de mon formulaire
+  //console.log(form.elements);
+  //Je crée ma variable pour faire la demande pour envoyer le body 
+  let body = makeRequestBody();
+  //Je fais ma requête POST à l'API, avec la méthode fetch
+    fetch("http://localhost:3000/api/products/order",{
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
 
-          //Je teste l'expression régulière
-          let testEmail = emailRegExp.test(inputEmail.value);
+ }  
 
-          if(testEmail){
-            emailErrorMsg.innerHTML = 'Adresse valide';
-            emailErrorMsg.classList.remove('text-danger');
-            emailErrorMsg.classList.add('text-success');
-          }else{
-            emailErrorMsg.innerHTML = 'Adresse invalide';
-            emailErrorMsg.classList.remove('text-success');
-            emailErrorMsg.classList.add('text-danger');
-          }
-        } */
+
+ // Fonction qui fait une requête au body
+ function makeRequestBody(){
+  // Je récupère la balise form
+  let form = document.querySelector('.cart__order__form');
+  //Création de l'objet
+  const firstName = form.elements.fisrtName.value
+  const lastName = form.elements.lastName.value
+  const address = form.elements.address.value
+  const city = form.elements.city.value
+  const email = form.elements.email.value
+
+  let body = {
+    contact : {
+      firstName: firstName,
+      lastName: lastName,
+      address: address,
+      city: city,
+      email: email
+    },
+    products : getIdsFromLocalStorage()
+  }
+  console.log(body);
+  return body
+ }
+
+ // Fonction qui récupère les id du localStorage
+
+    function getIdsFromLocalStorage() {
+
+      // Variable avec le nombre de produits = taille du localStorage
+      let numberOfProducts = localStorage.length
+      // Variable pour les ids qui sera un tableau vide
+      let ids = []
+
+      //Je fais une boucle qui va récupérer les clés du localStorage
+      for (let i = 0; i < numberOfProducts.length; i++){
+        // Variable qui cherche les clés du LS
+        let key = localStorage.key(i)
+        //Je contrôle mes données
+        console.log(key)
+        // Variable qui affiche l'id du produit stocké dans le LS : Je transforme mon string en array avec la méthode split, seule la première valeur nous intéresse donc paramètre 0
+        let id = key.split("-")[0]
+        //J'ajoute mon id aux autres ids
+        ids.push(id)
+      }
+      return ids
+    }
