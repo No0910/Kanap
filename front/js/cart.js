@@ -112,7 +112,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       // Je crée une nouvelle div pour la suppression
                       let baliseDivContentSettingsDelete = document.createElement("div") ;
                       baliseDivContentSettingsDelete.classList.add("cart__item__settings__delete") ;
-                      baliseDivContentSettingsDelete.addEventListener("click",() => deleteItem(product.id, product.color));
+                      baliseDivContentSettingsDelete.addEventListener('click',(event) => deleteItem(product.id, product.color, baliseDivContentSettingsDelete.value));
 
                       // Je dois insérer un P dans ma balise delete
                       let balisePDelete = document.createElement ("p") ;
@@ -265,58 +265,71 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
     // Fonction de suppression d'un produit  
 
-   function deleteItem (id,color) {
+    function deleteItem (id,color) {
       
       //Je contrôle mes données
-      //console.log(id,color);
+      console.log(id,color);
 
-      //
-      let itemToDelete = basket.findIndex((product) => product.id === id && product.color === color) 
+      // Je cherche le produit dans mon panier (basket = LocalStorage)
+      let itemToDelete = basket.filter((product) => (product.id !== id && product.color !== color) || (product.id === id && product.color !== color)) 
 
-      //
+      // Je contrôle l'id du produit à supprimer
       console.log("item to delete: ", itemToDelete);
 
-      //
-      basket.splice(itemToDelete,1);
+      // Je crée mon nouveau panier
+      let newBasket = itemToDelete;
 
-      //
-      console.log(basket);
+      // je sauvegarde mon localStorage
+      localStorage.setItem("products", JSON.stringify(newBasket));
 
-      //
+      // je contrôle mon localStorage
+      console.log(localStorage);
+
+      // Je recharge ma page
+      location.reload();
+
+      // Je contrôle mon nouveau panier
+      console.log(newBasket);
+
+      // Je recalcule les quantités
       calculateTotalQuantity();
 
-      //
-      calculateTotalQuantity();
+      // Je recalcule le prix
+      calculateTotalPrice();
 
-      //
+      // J'appelle la fonction qui supprime les données du localStorage
       deleteDataFromLocalStorage();
 
-      //
+      // J'appelle la fonction qui supprime l'article de ma page
       deleteArticleFromPage(product);
 
-
     }
 
-    function deleteDataFromLocalStorage(id,color) {
+        // Fonction qui supprime les données du localStorage, avec pour arguments l'id et la couleur :
+        function deleteDataFromLocalStorage(id,color) {
+          
+          // Création d'une variable 'key' qui récupère les données
+          let key = `${product.id}-${product.color}`;
 
-      let key = `${product.id}-${product.color}`;
-      console.log("on retire cette key", key);
-      localStorage.removeItem(key)
-    }
+          //Je contrôle ma donnée dans le localStorage
+          console.log("On retire cette clé", key);
 
-    function deleteArticleFromPage (product){
-      let articleToDelete = document.querySelector(
-        `<article class="cart__item" data-id="{product.id}" data-color="{product.color}">`
-      )
-
-      articleToDelete.remove();
-
-    }
+          // Je retire l'item avec la clé à supprimer du LocalStorage
+          localStorage.removeItem(key)
+        }
 
 
+        // Fonction qui supprime l'article de ma page :
+          function deleteArticleFromPage (product){
+          
+          // Je récupère l'article à supprimer avec son html
+          let articleToDelete = document.querySelector(
+            `<article class="cart__item" data-id="{product.id}" data-color="{product.color}">`
+          )
 
-
-
+          // Je supprime cet article de ma page
+          articleToDelete.remove();
+        }
  
 
     ///////////////////////////////////////////
