@@ -336,82 +336,179 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
          ///////// Formulaire /////////
 
 // je récupère mon bouton "commander"
-  let orderButton = document.querySelector("#order");
+  const orderButton = document.querySelector("#order");
 
 // Au clic, cela soit appeler la fonction submitForm() (Soumettre le formulaire) :
   orderButton.addEventListener('click', (event) => submitForm(event));
 
 // Fonction pour soumettre le formulaire :
  function submitForm(event) {
-  //Je ne veux pas que la page se recharge
-  event.preventDefault();
-  //
-  if(basket.length === 0) 
-    alert('Veuillez sélectionner un article à acheter')
-  //J'envoie une alerte une fois le clic effectué
-  alert('Formulaire envoyé !');
-  //Je contrôle les éléments de mon formulaire
-  //console.log(form.elements);
-  //Je crée ma variable pour faire la demande pour envoyer le body 
-  let body = makeRequestBody();
-  //Je fais ma requête POST à l'API, avec la méthode fetch
-    fetch("http://localhost:3000/api/products/order",{
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json"
+      //Je ne veux pas que la page se recharge
+      event.preventDefault();
+      //
+      if(basket.length === 0){
+        alert('Veuillez sélectionner un article à acheter')
+        return
       }
-    })
-        .then((res) => res.json())
-        .then((data) => console.log(data))
+
+      // Si mon formulaire est invalide, stopper la fonction submitForm
+      if (isFormInvalid()) return
+      // Si la saisie email est invalide, stopper la fonction submitForm
+      if(isEmailInvalid()) return
+
+      //J'envoie une alerte une fois le clic effectué
+      //alert('Formulaire envoyé !');
+
+      //Je crée ma variable pour faire la demande pour envoyer le body 
+      const body = makeRequestBody();
+
+      //Je fais ma requête POST à l'API, avec la méthode fetch
+        fetch("http://localhost:3000/api/products/order",{
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+            .then((res) => res.json())
+            .then((data) => console.log(data))
 
  }  
 
+  // Fonction si le formulaire est INvalide
+
+  function isFormInvalid(){
+    // Je récupère la balise form
+    const form = document.querySelector('.cart__order__form');
+    // Je récupère tous les inputs du formulaire
+    const inputs = form.querySelectorAll("input");
+    // Pour chaque , si la valeur de l'input est nulle, alors alert et retourner true
+    inputs.forEach((input) => {
+      if(input.value === ""){
+        alert("Veuillez remplir tous les champs")
+        return true // Oui le formulaire est invalide car tous les champs ne sont pas remplis
+      }
+      return false // Non le formulaire n'est pas invalide car tous les champs sont remplis
+    });
+ }
+
+//////////////Vérification de la validité des champs du formulaire//////////////////
+
+
+ // Je récupère les "p" pour afficher les messages d'erreur
+//let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+let addressErrorMsg = document.getElementById("addressErrorMsg");
+let emailErrorMsg = document.getElementById("emailErrorMsg");
+let cityErrorMsg = document.getElementById("cityErrorMsg");
+
+
+// Fonction qui vérifie la validité du prénom (FirstName)
+
+  function checkFirstName() {
+
+    let inputFirstName = document.getElementById("firstName").value;
+    let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+
+    const regexName = (value) => {
+      return /^[A-Za-zéèêëàçâ-]{3,30}$/.test(value);
+    };
+
+    if (regexName(inputFirstName)) {
+      firstNameErrorMsg.textContent = "Saisie validée";
+      return true;
+    } else {
+      firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
+      return false;
+    }
+  }
+
+// Fonction qui vérifie la validité du prénom (FirstName)
+
+  function checkLastName() {
+
+    let inputLastName = document.getElementById("lastName").value;
+    if (regexName(inputLastName)) {
+      firstNameErrorMsg.textContent = "Saisie validée";
+      return true;
+    } else {
+      firstNameErrorMsg.textContent = "Veuillez renseigner un prénom valide !";
+      return false;
+    }
+  }
+
+
+// Fonction si email INvalide
+
+  function isEmailInvalid(){
+
+    //Je récupère la balise avec l'email
+    const email = document.querySelector("#email").value;
+    //Je récupère le p qui contient le message d'erreur
+    const emailErrorMsg = document.getElementById("emailErrorMsg");
+    //J'affiche ma console
+    //console.log(email)
+    console.log(emailErrorMsg)
+    //Je crée une regex
+    const regex = /^[A-Za-z0-9+_.-]+@(.+)$/
+    //Condition de la regex : Si mon email ne remplit pas les conditions (=false), alors il est invalide, donc retourner true
+    if (regex.test(email) === false){
+      alert("Veuillez entrer un email valide")
+      return true
+    }
+    return false
+}
+
 
  // Fonction qui fait une requête au body
- function makeRequestBody(){
-  // Je récupère la balise form
-  let form = document.querySelector('.cart__order__form');
-  //Création de l'objet
-  const firstName = form.elements.fisrtName.value
-  const lastName = form.elements.lastName.value
-  const address = form.elements.address.value
-  const city = form.elements.city.value
-  const email = form.elements.email.value
 
-  let body = {
-    contact : {
-      firstName: firstName,
-      lastName: lastName,
-      address: address,
-      city: city,
-      email: email
-    },
-    products : getIdsFromLocalStorage()
+  function makeRequestBody() {
+
+      // Je récupère la balise form
+      const form = document.querySelector('.cart__order__form');
+
+      //Création de l'objet
+      const firstName = form.elements.fisrtName;
+      const lastName = form.elements.lastName;
+      const address = form.elements.address;
+      const city = form.elements.city;
+      const email = form.elements.email;
+
+      // Je rassemble les données à transmettre à l'API
+      const body = {
+        contact : {
+          firstName: firstName,
+          lastName: lastName,
+          address: address,
+          city: city,
+          email: email
+        },
+        products : getIdsFromLocalStorage()
+      }
+      console.log(body);
+      return body
   }
-  console.log(body);
-  return body
- }
+
+
 
  // Fonction qui récupère les id du localStorage
 
     function getIdsFromLocalStorage() {
 
       // Variable avec le nombre de produits = taille du localStorage
-      let numberOfProducts = localStorage.length
+      const numberOfProducts = localStorage.length
       // Variable pour les ids qui sera un tableau vide
       let ids = []
-
       //Je fais une boucle qui va récupérer les clés du localStorage
-      for (let i = 0; i < numberOfProducts.length; i++){
-        // Variable qui cherche les clés du LS
-        let key = localStorage.key(i)
-        //Je contrôle mes données
-        console.log(key)
-        // Variable qui affiche l'id du produit stocké dans le LS : Je transforme mon string en array avec la méthode split, seule la première valeur nous intéresse donc paramètre 0
-        let id = key.split("-")[0]
-        //J'ajoute mon id aux autres ids
-        ids.push(id)
-      }
+          for (let i = 0; i < numberOfProducts; i++){
+            // Variable qui cherche les clés du LS
+            let key = localStorage.key(i)
+            //Je contrôle mes données
+            console.log(key)
+            // Variable qui affiche l'id du produit stocké dans le LS : Je transforme mon string en array avec la méthode split, seule la première valeur nous intéresse donc paramètre 0
+            let id = key.split("-")[0]
+            //J'ajoute mon id aux autres ids
+            ids.push(id)
+          }
       return ids
     }
