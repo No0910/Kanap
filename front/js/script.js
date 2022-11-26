@@ -7,8 +7,8 @@ const items = document.getElementById("items");
 fetch("http://localhost:3000/api/products/")
     .then((response) => {
         if (response.ok) {
-
             response.json()
+            
                 .then((products) => {
                     for (let product of products) {
 

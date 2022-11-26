@@ -136,12 +136,6 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       baliseDivContentSettings.appendChild(baliseDivContentSettingsDelete);
                       baliseDivContentSettingsDelete.appendChild(balisePDelete);
 
-                      //TODO calculer les quantités commandées de ma variable product
-                      //TODO calculer le prix total des produits commandés monProduit/product mix 
-                      //TODO écrire la fonction de suppression d'un produit 
-                      //TODO fonction qui recalcule le panier quand je change les quantités
-
-
                     })
         }
       }
@@ -184,7 +178,6 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
       // Je récupère le produit courant
       let product = basket[i];
-      console.log(product);
       
       //J'appelle l'API //
         fetch("http://localhost:3000/api/products/" + product.id)
@@ -337,21 +330,17 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
       // Si mon formulaire est invalide, stopper la fonction submitForm
       if(isFormInvalid()) return
-      //
+      // Si ma fonction checkFirstName est invalide, stopper la fonction submitForm
       if(!checkFirstName()) return
-      //
+      // Si ma fonction checkLastName est invalide, stopper la fonction submitForm
       if(!checkLastName()) return
-      //
+      // Si ma fonction checkAddress est invalide, stopper la fonction submitForm
       if(!checkAddress()) return
-      //
+      // Si ma fonction checkCity est invalide, stopper la fonction submitForm
       if(!checkCity()) return
       // Si la saisie email est invalide, stopper la fonction submitForm
       if(!checkEmail()) return
-      //
-
-
-      //J'envoie une alerte une fois le clic effectué
-      //alert('Formulaire envoyé !');
+      
 
       //Je crée ma variable pour faire la demande pour envoyer le body 
       let body = makeRequestBody();
@@ -442,7 +431,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
           let product = basket[i]; 
           //Je contrôle mes données
           console.log(product)
-          // Variable qui affiche l'id du produit stocké dans le LS : Je transforme mon string en array avec la méthode split, seule la première valeur nous intéresse donc paramètre 0
+          // Variable qui affiche l'id du produit stocké dans le LS
           let id = product.id
           //J'ajoute mon id aux autres ids
           ids.push(id)
@@ -578,6 +567,5 @@ function checkCity() {
 
 // Je nettoie le localStorage une fois la commande validée
 localStorage.clear();
-
 
 //fin//
