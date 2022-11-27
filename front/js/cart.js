@@ -246,6 +246,11 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
         // je recalcule le total à payer
         calculateTotalPrice()
+
+         /*const itemToUpdate = basket.find((product) => product.id === id);
+        itemToUpdate.quantity = Number(newValue);
+        calculateTotalQuantity()
+        calculateTotalPrice()*/
                   
       } 
       
@@ -273,6 +278,9 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
       // je contrôle mon localStorage
       console.log(localStorage);
 
+      // Je recharge ma page
+      location.reload();
+
       // Je contrôle mon nouveau panier
       console.log(newBasket);
 
@@ -289,6 +297,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
       window.location.reload();
 
     }
+
 
         // Fonction qui supprime les données du localStorage, avec pour arguments l'id et la couleur :
         function deleteDataFromLocalStorage(id,color) {
@@ -565,7 +574,6 @@ function checkCity() {
     /**************///////////////////////////////////////////**************/
                         ///////// Fin du formulaire /////////
 
-// Je nettoie le localStorage une fois la commande validée
-localStorage.clear();
+
 
 //fin//
