@@ -26,19 +26,17 @@ for (let i = 0; i < nbProducts; i++) {
 
 let product = basket[i];
 
+// Je contrôle mon product
+
 console.log(product);
 
-// 3. Pour chaque produit, je dois créer une ligne dans mon tableau ( qui correspond à ce qui est commenté dans cart.html )
-
-
-// Je veux créer un article, à l’intérieur de ma section déjà existante
 // Je récupère l’élément « section » qui existe déjà pour y créer mes éléments actuellement commentés dans mon html
 
 let baliseSection = document.getElementById ("cart__items") ;
 
 // Puis j'appelle l'API avec la fonction fetch
 
-//Puis appeller l'API //
+//Appel de  l'API //
 fetch("http://localhost:3000/api/products/" + product.id) //product.id récupère l'identifiant du produit dans le tableau crée ligne 27, .id est la clé
     .then((response) => {
         if (response.ok) {
@@ -76,15 +74,13 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       //Le premier P pour la couleur
 
                       let baliseP1 = document.createElement ("p") ;
-                      baliseP1.textContent = product.color ; 
-                     
+                      baliseP1.textContent = product.color ;    
 
                       // Puis le second P pour le prix
 
                       let baliseP2 = document.createElement ("p") ;
                       baliseP2.textContent = monProduit.price + " €" ;
                      
-
                       // Je crée une nouvelle div appelée baliseDivContentSettings
                       let baliseDivContentSettings = document.createElement ("div") ;
                       baliseDivContentSettings.classList.add("cart__item__content__settings") ;
@@ -96,7 +92,6 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       // Dans ma div baliseDivContentSettingsQuantity je dois insérer un P et un input 
                       let balisePSettings = document.createElement("p") ;
                       balisePSettings.textContent = "Qté : ";
-
                       
                       // Je crée mon input
                       let baliseInputSettings = document.createElement ("input") ;
@@ -118,7 +113,6 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                       let balisePDelete = document.createElement ("p") ;
                       balisePDelete.className = "deleteItem" ;
                       balisePDelete.textContent = "Supprimer";
-
 
                      
                       baliseSection.appendChild(baliseArticle);
@@ -145,26 +139,26 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
 
 //// Fonction qui calcule le total des quantités de produits du panier ////
 
-     function calculateTotalQuantity() {
+    function calculateTotalQuantity() {
 
-      let getTotalQuantity = document.querySelector("#totalQuantity");
-      let basket = JSON.parse(localStorage.getItem("products"));
-      let calculateTotalQuantity= [];
+    let getTotalQuantity = document.querySelector("#totalQuantity");
+    let basket = JSON.parse(localStorage.getItem("products"));
+    let calculateTotalQuantity= [];
+    
+    let totalQuantity = 0;
+    for( let product of basket){
+        totalQuantity += parseInt(product.quantity);
+    }
+
+    calculateTotalQuantity.push(totalQuantity);
+    getTotalQuantity.innerText = totalQuantity;
+
+    }
+
+  calculateTotalQuantity();
+
       
-      let totalQuantity = 0;
-      for( let product of basket){
-          totalQuantity += parseInt(product.quantity);
-      }
-
-      calculateTotalQuantity.push(totalQuantity);
-      getTotalQuantity.innerText = totalQuantity;
-
-      }
-
-    calculateTotalQuantity();
-
-      
-////Fonction qui calcule le prix total du panier///
+//// Fonction qui calcule le prix total du panier////
 
 
   // Boucle qui va chercher les prix dans le panier
@@ -189,7 +183,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
                   // Nouvelle variable qui récupère le prix
                   let priceProductInBasket = monProduit.price;
 
-                  // Nouvelle variable pour calculer le prix par produit
+                  // Nouvelle variable pour calculer le prix par produit 
                   let pricePerProduct = product.quantity * priceProductInBasket;
 
                   // Somme totale = Somme totale + prix par produit (quantité de produit x prix du produit unitaire)
@@ -247,11 +241,6 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
         // je recalcule le total à payer
         calculateTotalPrice()
 
-         /*const itemToUpdate = basket.find((product) => product.id === id);
-        itemToUpdate.quantity = Number(newValue);
-        calculateTotalQuantity()
-        calculateTotalPrice()*/
-                  
       } 
       
       updatePriceAndQuantity();
@@ -311,9 +300,6 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
           // Je retire l'item avec la clé à supprimer du LocalStorage
           localStorage.removeItem(key)
         }
-
-
-      
 
 
 

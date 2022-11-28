@@ -2,7 +2,7 @@
 
 let productChoices = null;
 
-// 1. Je vais créer le panier dans le LocalStorage
+// 1 : Je vais créer le panier dans le LocalStorage
 
 let basket = JSON.parse(localStorage.getItem("products"));
 
@@ -57,7 +57,7 @@ fetch("http://localhost:3000/api/products/" + productId)
 
 
 
-//// 5: A l'évènement 'click' sur le bouton 'btnAddProductToBasket' --> Cela envoit les produits au localStorage
+//// 5: A l'évènement 'click' sur le bouton 'btnAddProductToBasket' ("Ajouter au panier") ---> Cela envoit les produits au localStorage
 
             // 1. Je crée une variable pour le bouton "ajouter au panier", qui permet de sélectionner l'id du bouton ('addToCart') grâce à querySelector
 
@@ -71,7 +71,6 @@ fetch("http://localhost:3000/api/products/" + productId)
             let colorOfProduct = document.querySelector("#colors").value;
 
             // 4. Je récupére la quantité saisie
-
             let quantityOfProduct = document.querySelector("#quantity").value;
 
             // 5. Conditions du panier
@@ -82,9 +81,7 @@ fetch("http://localhost:3000/api/products/" + productId)
                 alert("Vous devez ajouter au moins un produit par commande")
             } else if (quantityOfProduct > 100) {
                 alert("Vous ne pouvez pas ajouter plus de 100 produits par commande")
-
             } else {
-
                 // 6. Création de l'objet à envoyer au LocalStorage
                 productChoices = {
                     id: productId,
@@ -92,9 +89,10 @@ fetch("http://localhost:3000/api/products/" + productId)
                     quantity: quantityOfProduct,
                 }
 
-
+                // Je contrôle mon objet
                 console.log(productChoices);
 
+                // je contrôle mon panier
                 console.log(basket);
 
             // 7. Si j'ai déjà des produits dans mon panier : je lance la recherche pour pouvoir le faire le cumul des quantités
