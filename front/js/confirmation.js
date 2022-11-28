@@ -10,3 +10,6 @@ console.log("Le numéro de commande est: " + orderId);
 // Je l'affiche sur le navigateur en allant chercher le span orderId
 let spanOrderId = document.getElementById('orderId');
 spanOrderId.textContent = orderId;
+
+//Vider le localStorage
+localStorage.clear()
