@@ -13,7 +13,7 @@ fetch("https://nd-kanap.onrender.com/api/products/")
                     for (let product of products) {
 
                         let baliseA = document.createElement("a");
-                        baliseA.href = `product.html?id=${product._id}`;
+                        baliseA.href = `html/product.html?id=${product._id}`;
                         
                         let baliseArticle = document.createElement("article"); 
 
