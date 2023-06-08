@@ -37,7 +37,7 @@ let baliseSection = document.getElementById ("cart__items") ;
 // Puis j'appelle l'API avec la fonction fetch
 
 //Appel de  l'API //
-fetch("http://localhost:3000/api/products/" + product.id) //product.id récupère l'identifiant du produit dans le tableau crée ligne 27, .id est la clé
+fetch("https://nd-kanap.onrender.com/api/products/" + product.id) //product.id récupère l'identifiant du produit dans le tableau crée ligne 27, .id est la clé
     .then((response) => {
         if (response.ok) {
             response.json()
@@ -174,7 +174,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
       let product = basket[i];
       
       //J'appelle l'API //
-        fetch("http://localhost:3000/api/products/" + product.id)
+        fetch("https://nd-kanap.onrender.com/api/products/" + product.id)
           .then((response) => {
             if (response.ok) {
               response.json()
@@ -341,7 +341,7 @@ fetch("http://localhost:3000/api/products/" + product.id) //product.id récupèr
       let body = makeRequestBody();
    
       //Je fais ma requête POST à l'API, avec la méthode fetch
-        fetch("http://localhost:3000/api/products/order",{
+        fetch("https://nd-kanap.onrender.com/api/products/order",{
 
           method: 'POST',
           body: JSON.stringify(body),

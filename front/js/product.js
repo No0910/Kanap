@@ -28,7 +28,7 @@ let productPrice = document.getElementById("price");
 
 //// 4 : Je vais appeler l'API pour récupérer les informations du produit à afficher
 
-fetch("http://localhost:3000/api/products/" + productId)
+fetch("https://nd-kanap.onrender.com/api/products/" + productId)
     .then((response) => {
         if (response.ok) {
             response.json()

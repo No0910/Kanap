@@ -4,7 +4,7 @@
 const items = document.getElementById("items");
 
 //Puis appeller l'API //
-fetch("http://localhost:3000/api/products/")
+fetch("https://nd-kanap.onrender.com/api/products/")
     .then((response) => {
         if (response.ok) {
             response.json()
