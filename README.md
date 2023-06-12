@@ -44,7 +44,7 @@ peut sélectionner une quantité, une couleur, et ajouter le produit à son pani
 
 ### Les contraintes techniques
 
-**Page d'accueil**
+##Page d'accueil
 Cette page présente l’ensemble des produits retournés par l’API.
 Pour chaque produit, il faudra afficher l’image de celui-ci, ainsi que son nom et le début de
 sa description.
@@ -52,12 +52,12 @@ En cliquant sur le produit, l’utilisateur sera redirigé sur la page du produi
 celui-ci plus en détail.
 
 
-**Page Produit**
+##Page Produit
 Cette page présente un seul produit ; elle aura un menu déroulant permettant à l'utilisateur
 de choisir une option de personnalisation, ainsi qu’un input pour saisir la quantité. Ces
 éléments doivent être pris en compte dans le panier.
 
-**Page Panier**
+##Page Panier
 Sur cette page, l’utilisateur va pouvoir modifier la quantité d’un produit de son panier ; à ce
 moment, le total du panier devra bien se mettre à jour.
 L’utilisateur aura aussi la possibilité de supprimer un produit de son panier, le produit devra
@@ -70,11 +70,11 @@ correspondant.
 Attention à ne pas stocker le prix des articles en local. Les données stockées en local ne
 sont pas sécurisées et l’utilisateur pourrait alors modifier le prix lui-même.
 
-**Page Confirmation**
+##Page Confirmation
 Sur cette page, l'utilisateur doit voir s’afficher son numéro de commande. Il faudra veiller à
 ce que ce numéro ne soit stocké nulle part.
 
-**Code source**
+##Code source
 Celui-ci devra être indenté et utiliser des commentaires en début de chaque fonction pour
 décrire son rôle. Il devra également être découpé en plusieurs fonctions réutilisables
 (nommées). Une fonction doit être courte et répondre à un besoin précis. Il ne faudrait pas
@@ -82,21 +82,21 @@ avoir de longues fonctions qui viendraient répondre à plusieurs besoins à la 
 ne serait pas accepté de mettre une seule et unique fonction en place pour collecter, traiter
 et envoyer des données
 
-**API**
+##API
 Concernant l’API, des promesses devront être utilisées pour éviter les callbacks. Il est
 possible d’utiliser des solutions alternatives, comme fetch, celle-ci englobant la promesse.
 L’API n’est actuellement que dans sa première version. La requête post qu’il faudra formuler
 pour passer une commande ne prend pas encore en considération la quantité ni la couleur
 des produits achetés.
 
-**Fonctionnement du panier**
+##Fonctionnement du panier
 Dans le panier, les produits doivent toujours apparaître de manière regroupée par modèle et
 par couleur.
 Si un produit est ajouté dans le panier à plusieurs reprises, avec la même couleur, celui-ci
 ne doit apparaître qu’une seule fois, mais avec le nombre d’exemplaires ajusté.
 Si un produit est ajouté dans le panier à plusieurs reprises, mais avec des couleurs différentes, il doit apparaître en deux lignes distinctes avec la couleur et la quantité correspondantes indiquées à chaque fois.
 
-**Validation des données**
+##Validation des données
 Pour les routes POST, l’objet contact envoyé au serveur doit contenir les champs firstName,
 lastName, address, city et email. Le tableau des produits envoyé au back-end doit être un
 array de strings product-ID. Les types de ces champs et leur présence doivent être validés
@@ -117,12 +117,12 @@ avant l’envoi des données au serveur.
 - Texte: Montserrat
 
 **Couleurs utilisées**
-	--main-color: #3498db;
-	--secondary-color: #2c3e50;
-	--text-color: #3d4c68;
-	--footer-text-color: #a6b0b3; 
-	--footer-main-color: #3d424f; 
-	--footer-secondary-color: #2d2f3e;
+- main-color: #3498db;
+- secondary-color: #2c3e50;
+- text-color: #3d4c68;
+- footer-text-color: #a6b0b3; 
+- footer-main-color: #3d424f; 
+- footer-secondary-color: #2d2f3e;
 
 **Compatibilité**
 - Développement en mobile-first à partir des maquettes fournies
