@@ -6,7 +6,9 @@
 
 5ème projet de la formation de développeur web d'OpenClassroom.
 
-## image
+## Screenshot
+![Miniature Sites](https://github.com/No0910/Kanap/assets/98163578/d5638150-d537-46f8-8d84-ae74a5cac940)
+
 
 ## Enjeux
 ---
