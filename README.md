@@ -141,5 +141,5 @@ git clone [https://github.com/No0910/kanap.git](https://github.com/No0910/Kanap.
 ```
 
 ## Auteur
-
+---
 Nolwenn DUHAMEL
