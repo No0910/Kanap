@@ -42,7 +42,7 @@ peut sélectionner une quantité, une couleur, et ajouter le produit à son pani
   ○ Un message de confirmation de commande, remerciant l'utilisateur pour sa
   commande, et indiquant l'identifiant de commande envoyé par l’API.
 
-### Les contraintes techniques
+# Les contraintes techniques
 
 ## Page d'accueil
 Cette page présente l’ensemble des produits retournés par l’API.
