@@ -133,7 +133,7 @@ avant l’envoi des données au serveur.
 
 ## Installation
 ---
-Une version en ligne est directement accessible à l'adresse : [https://nd-kanap.vercel.app/]
+Une version en ligne est directement accessible à l'adresse : [Kanap](https://nd-kanap.vercel.app/)
 
 Sinon, vous pouvez cloner le projet
 ```terminal
